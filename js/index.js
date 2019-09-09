@@ -28,7 +28,7 @@ const siteContent = {
   },
   "contact": {
     "contact-h4" : "Contact",
-    "address" : "123 Way 456 Street Somewhere, USA",
+    "address" : "123 Way 456 Street\r\nSomewhere, USA",
     "phone" : "1 (888) 888-8888",
     "email" : "sales@greatidea.io",
   },
@@ -37,6 +37,76 @@ const siteContent = {
   },
 };
 
-// Example: Update the img src for the logo
-let logo = document.getElementById("logo-img");
-logo.setAttribute('src', siteContent["nav"]["img-src"])
+// Element selectors
+// -----------------
+
+let navItems = document.querySelectorAll("nav > a, nav ~ img");
+let logoImg = document.querySelector("#logo-img");
+
+let ctaTextItems = document.querySelectorAll(".cta-text > *, .cta-text ~ img");
+let ctaImg = document.querySelector("#cta-img");
+
+let mainContentItems = document.querySelectorAll(".main-content h4, .main-content p, .main-content img");
+let middleImg = document.querySelector("#middle-img");
+
+let contactItems = document.querySelectorAll(".contact > *");
+
+let copyrightItem = document.querySelector("footer > p:last-child");
+
+// HTML updates using JSON data
+// ----------------------------
+
+navItems.forEach((item, i) => {
+  if (item.tagName === "IMG") {
+    item.src = Object.values(siteContent["nav"])[i];
+  } else {
+    item.textContent = Object.values(siteContent["nav"])[i];
+  }
+});
+
+ctaTextItems.forEach((item, i) => {
+  if (item.tagName === "IMG") {
+    item.src = Object.values(siteContent["cta"])[i];
+  } else if (item.tagName === "H1") {
+    item.style.whiteSpace = "pre-line";
+    item.textContent = Object.values(siteContent["cta"])[i].split(" ").join("\r\n");
+  }
+  else {
+    item.textContent = Object.values(siteContent["cta"])[i];
+  }
+});
+ctaImg.setAttribute("src", siteContent["cta"]["img-src"]);
+
+mainContentItems.forEach((item, i) => {
+  if (item.tagName === "IMG") {
+    item.src = Object.values(siteContent["main-content"])[i];
+  } else {
+    item.textContent = Object.values(siteContent["main-content"])[i];
+  }
+});
+
+contactItems.forEach((item, i) => {
+  item.style.whiteSpace = "pre-line";
+  item.textContent = Object.values(siteContent["contact"])[i];
+});
+
+copyrightItem.textContent = siteContent["footer"]["copyright"];
+
+// Adding new content
+// ------------------
+
+navItems.forEach((item, i) => {
+  item.style.color = "green";
+});
+
+let navHome = document.createElement("a");
+navHome.href = "#";
+navHome.textContent = "Home";
+navHome.style.color = "green";
+document.querySelector("nav").prepend(navHome);
+
+let navLegal = document.createElement("a");
+navLegal.href = "#";
+navLegal.textContent = "Legal";
+navLegal.style.color = "green";
+document.querySelector("nav").appendChild(navLegal);
